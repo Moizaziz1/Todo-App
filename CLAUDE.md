@@ -1,8 +1,8 @@
-# Claude Code Rules
+﻿# Claude Code Rules
 
 This file is generated during init for the selected agent.
 
-You are an expert AI assistant specializing in Spec-Driven Development (SDD). Your primary goal is to work with the architext to build products.
+You are an expert AI assistant specializing in Spec-Driven Development (SDD). Your primary goal is to transform the console app into a modern multi-user web application with persistent storage using the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via Claude Code.
 
 ## Task context
 
@@ -13,6 +13,7 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
 - Prompt History Records (PHRs) are created automatically and accurately for every user prompt.
 - Architectural Decision Record (ADR) suggestions are made intelligently for significant decisions.
 - All changes are small, testable, and reference code precisely.
+- Successfully implement all 5 Basic Level features as a web application with authentication, responsive UI, and persistent storage.
 
 ## Core Guarantees (Product Promise)
 
@@ -195,6 +196,47 @@ If ALL true, suggest:
    Document reasoning and tradeoffs? Run `/sp.adr [decision-title]`
 
 Wait for consent; never auto-create ADRs. Group related decisions (stacks, authentication, deployment) into one ADR when appropriate.
+
+## Technology Stack & Agent Usage
+
+This project follows the Agentic Dev Stack workflow using specialized agents:
+
+### Agent Specialization:
+- **Auth Agent**: Handle authentication implementation using Better Auth
+- **Frontend Agent**: Develop responsive frontend using Next.js 16+ (App Router)
+- **DB Agent**: Design and manage database schemas using Neon Serverless PostgreSQL with SQLModel
+- **Backend Agent**: Build RESTful API endpoints using Python FastAPI
+
+### Tech Stack Overview:
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16+ (App Router) |
+| Backend | Python FastAPI |
+| ORM | SQLModel |
+| Database | Neon Serverless PostgreSQL |
+| Spec-Driven | Claude Code + Spec-Kit Plus |
+| Authentication | Better Auth |
+
+### Authentication Flow:
+Better Auth is configured to issue JWT (JSON Web Token) tokens when users log in. These tokens are self-contained credentials that include user information and can be verified by any service that knows the secret key.
+
+**How It Works:**
+1. User logs in on Frontend → Better Auth creates a session and issues a JWT token
+2. Frontend makes API call → Includes the JWT token in the Authorization: Bearer <token> header
+3. Backend receives request → Extracts token from header, verifies signature using shared secret
+4. Backend identifies user → Decodes token to get user ID, email, etc. and matches it with the user ID in the URL
+5. Backend filters data → Returns only tasks belonging to that user
+
+## Basic Level Functionality Requirements
+
+**Objective:** Transform the console app into a modern multi-user web application with persistent storage.
+
+**Requirements:**
+- Implement all 5 Basic Level features as a web application
+- Create RESTful API endpoints
+- Build responsive frontend interface
+- Store data in Neon Serverless PostgreSQL database
+- Authentication – Implement user signup/signin using Better Auth
 
 ## Basic Project Structure
 

@@ -1,55 +1,63 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- SYNC IMPACT REPORT:
+Version change: N/A -> 1.0.0
+Added sections: Core Principles 1-6, Additional Constraints, Development Workflow, Governance rules
+Removed sections: None (completely new constitution)
+Templates requiring updates: N/A (new file)
+Follow-up TODOs: None
+-->
+# Todo Full-Stack Web Application Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Spec-Driven Development (NON-NEGOTIABLE)
+All features must be implemented via spec → plan → tasks → Claude Code; No manual coding allowed; All development must follow the Agentic Dev Stack workflow with proper documentation and traceability.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Full-Stack Architecture
+Maintain clear separation between frontend, backend, and database concerns; Each layer must be independently testable and maintainable; Proper API contracts defined between layers.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Security-First Design (NON-NEGOTIABLE)
+JWT-based authentication must be enforced on all protected routes; All API endpoints must reject unauthenticated requests with 401 Unauthorized; User data isolation must prevent cross-user access to resources.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. REST API Conventions
+All API endpoints must follow REST conventions with proper HTTP methods and status codes; Resource-based URL structures; Standardized response formats for success and error cases.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Data Persistence Requirement
+All task operations must persist in Neon Serverless PostgreSQL database using SQLModel ORM; No in-memory storage for production data; Database schema must be well-defined and version-controlled.
 
-### [PRINCIPLE_6_NAME]
+### VI. Frontend-Backend Separation
+Frontend must use Next.js 16+ App Router conventions; Clear API contract between frontend and backend; Proper state management and error handling on client-side.
 
+## Additional Constraints
 
-[PRINCIPLE__DESCRIPTION]
+### Technology Stack Requirements
+- Frontend: Next.js 16+ (App Router)
+- Backend: Python FastAPI
+- ORM: SQLModel
+- Database: Neon Serverless PostgreSQL
+- Authentication: Better Auth with JWT
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Implementation Constraints
+- No manual coding (only Claude Code execution)
+- All data must persist in the database (no in-memory storage)
+- All endpoints must reject unauthenticated requests (401 Unauthorized)
+- All task operations must be scoped to the authenticated user
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Development Workflow
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Feature Implementation
+- Features must be developed following the spec → plan → tasks → implementation flow
+- Each feature must have clear acceptance criteria defined in specs
+- Tasks must be granular enough to be completed in 15-30 minute increments
+- Code reviews must verify adherence to constitutional principles
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Testing Requirements
+- All API endpoints must be tested with proper authentication flows
+- User isolation must be verified through comprehensive testing
+- Frontend components must be tested for proper authentication handling
+- Database operations must be validated for data integrity
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+All development activities must comply with these constitutional principles. Deviations require explicit amendment to this constitution through proper governance procedures. The constitution supersedes all other development practices and guides decision-making when trade-offs arise. Code reviews and pull request approvals must verify constitutional compliance. The spec-driven approach must be maintained throughout the project lifecycle.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-02-06 | **Last Amended**: 2026-02-06

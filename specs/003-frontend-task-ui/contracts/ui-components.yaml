@@ -1,0 +1,213 @@
+# UI Component Specifications: Task Management Interface
+
+## Page: Task Dashboard (/dashboard)
+
+**Route**: `/dashboard`
+**Auth**: Protected (requires authentication)
+
+### Layout
+```
+┌─────────────────────────────────────────┐
+│ Header                                  │
+│   Task Manager         [Sign Out]       │
+├─────────────────────────────────────────┤
+│                                         │
+│ [+ Create Task]                         │
+│                                         │
+│ ┌─────────────────────────────────┐   │
+│ │ ☐ Task 1 Title          [Edit][Del]│   │
+│ │   Task description here...      │   │
+│ └─────────────────────────────────┘   │
+│                                         │
+│ ┌─────────────────────────────────┐   │
+│ │ ☑ Completed Task       [Edit][Del]│   │
+│ │   Strikethrough styling          │   │
+│ └─────────────────────────────────┘   │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+### Components
+
+#### 1. TaskDashboard (Main Container)
+**Purpose**: Container for entire task management interface
+**State**: tasks[], loading, error
+**Actions**: fetchTasks(), refreshTasks()
+
+#### 2. TaskList
+**Purpose**: Renders list of task items
+**Props**: tasks[], onToggle, onEdit, onDelete
+**States**:
+- Loading: Shows skeleton screens (3-5 items)
+- Empty: Shows "No tasks yet" with create prompt
+- Error: Shows error message with retry
+- Success: Renders TaskItem components
+
+#### 3. TaskItem
+**Purpose**: Individual task display with actions
+**Props**: task, onToggle, onEdit, onDelete
+**Display**:
+- Checkbox (completion toggle)
+- Title (strikethrough if completed)
+- Description (optional, collapsed on mobile)
+- Action buttons (Edit, Delete)
+
+**Responsive**:
+- Desktop: Horizontal layout, all details visible
+- Mobile: Stacked layout, description hidden by default
+
+#### 4. CreateTaskForm
+**Purpose**: Form for creating new tasks
+**State**: title, description, priority, errors, isSubmitting
+**Validation**:
+- Title required
+- Title ≤ 255 chars
+- Description ≤ 1000 chars
+**Actions**: onSubmit(), onCancel()
+
+**Display Options**:
+- Modal overlay
+- Inline expandable form below "Create Task" button
+
+#### 5. EditTaskModal
+**Purpose**: Modal for editing existing task
+**Props**: task, open, onSave, onCancel
+**State**: title, description, priority, errors, isSubmitting
+**Validation**: Same as CreateTaskForm
+
+#### 6. DeleteConfirmationDialog
+**Purpose**: Confirmation before deleting task
+**Props**: task, open, onConfirm, onCancel
+**Display**:
+```
+Are you sure you want to delete "[Task Title]"?
+This action cannot be undone.
+
+[Cancel] [Delete]
+```
+
+---
+
+## Component Props & Events
+
+### TaskList Component
+```typescript
+interface TaskListProps {
+  tasks: Task[]
+  isLoading: boolean
+  error: string | null
+  onRefresh: () => void
+  onToggleComplete: (taskId: number, completed: boolean) => Promise<void>
+  onEdit: (task: Task) => void
+  onDelete: (taskId: number) => Promise<void>
+}
+```
+
+### TaskItem Component
+```typescript
+interface TaskItemProps {
+  task: Task
+  onToggleComplete: (completed: boolean) => Promise<void>
+  onEdit: () => void
+  onDelete: () => Promise<void>
+}
+```
+
+### CreateTaskForm Component
+```typescript
+interface CreateTaskFormProps {
+  onSubmit: (data: CreateTaskInput) => Promise<void>
+  onCancel: () => void
+  isOpen: boolean
+}
+```
+
+---
+
+## Loading States
+
+### 1. Initial Page Load
+Display skeleton screens:
+```
+┌─────────────────────────────────┐
+│ ░░░░░░░░░░░░░░░░░░░    [░░][░░]│
+│ ░░░░░░░░░░░░░░              │
+└─────────────────────────────────┘
+```
+
+### 2. Task Action (Toggle, Delete)
+Show spinner on affected element:
+```
+☐ Task Title  ⟳  [Edit][Delete]
+```
+
+### 3. Form Submission
+Disable button with loading text:
+```
+[Creating...] (disabled)
+```
+
+---
+
+## Empty States
+
+### No Tasks
+```
+┌─────────────────────────────────────────┐
+│                                         │
+│         No tasks yet!                   │
+│                                         │
+│   Get started by creating your first    │
+│   task using the button above.          │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## Error States
+
+### API Error
+```
+┌─────────────────────────────────────────┐
+│ ⚠ Failed to load tasks                  │
+│   [Retry]                               │
+└─────────────────────────────────────────┘
+```
+
+### Validation Error
+```
+Title
+[________________________]
+⚠ Title is required
+```
+
+---
+
+## Responsive Breakpoints
+
+### Mobile (< 640px)
+- Single column layout
+- Full-width task cards
+- Stacked buttons (Edit/Delete)
+- Touch-friendly tap targets (44x44px)
+
+### Tablet (640px - 1024px)
+- Single column with more padding
+- Task cards with side-by-side buttons
+- Larger text and spacing
+
+### Desktop (> 1024px)
+- Centered container (max 800px width)
+- Horizontal button layout
+- All descriptions visible by default
+
+---
+
+## Accessibility Requirements
+
+- Keyboard navigation for all actions
+- Focus visible on interactive elements
+- ARIA labels for icon-only buttons
+- Form labels properly associated
+- Error messages announced to screen readers
